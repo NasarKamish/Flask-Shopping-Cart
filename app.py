@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 from flask_jwt import JWT, jwt_required, current_identity
 from flask_cors import CORS
 
-db = "TEST.db"
+db = "Shop.db"
 
 
 class User(object):
