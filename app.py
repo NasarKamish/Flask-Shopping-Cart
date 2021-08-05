@@ -61,7 +61,7 @@ def init_product_table():
     with sqlite3.connect(db) as conn:
         conn.execute("CREATE TABLE IF NOT EXISTS Product (product_id INTEGER PRIMARY KEY AUTOINCREMENT,"
                      "name TEXT NOT NULL,"
-                     "price TEXT NOT NULL"
+                     "price TEXT NOT NULL,"
                      "date TEXT NOT NULL"
                      ")")
     print("Product table created successfully.")
@@ -191,8 +191,8 @@ def create_product():
             cursor.execute("INSERT INTO Product ("
                            "name,"
                            "price,"
-                           "date,"
-                           ") VALUES(?, ?)", (product_name, product_price, date_created))
+                           "date"
+                           ") VALUES(?, ?, ?)", (product_name, product_price, date_created))
             conn.commit()
             response["status_code"] = 201
             response['description'] = "Product added successfully"
@@ -213,13 +213,27 @@ def get_products():
     return response
 
 
+@app.route('/get-users/', methods=["GET"])
+def get_user():
+    response = {}
+    with sqlite3.connect(db) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM user")
+
+        products = cursor.fetchall()
+
+    response['status_code'] = 200
+    response['data'] = products
+    return response
+
+
 @app.route("/delete-product/<int:product_id>")
 @jwt_required()
 def delete_post(product_id):
     response = {}
     with sqlite3.connect(db) as conn:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM Product WHERE id=" + str(product_id))
+        cursor.execute("DELETE FROM Product WHERE product_id=" + str(product_id))
         conn.commit()
         response['status_code'] = 200
         response['message'] = "blog post deleted successfully."
@@ -273,7 +287,7 @@ def get_post(product_id):
 
     with sqlite3.connect(db) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM Product WHERE id=" + str(product_id))
+        cursor.execute("SELECT * FROM Product WHERE product_id=" + str(product_id))
 
         response["status_code"] = 200
         response["description"] = "Product retrieved successfully"
