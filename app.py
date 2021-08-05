@@ -176,8 +176,71 @@ def user_registration():
     return response
 
 
+@app.route('/user-registration/', methods=["GET"])
+def user_registration():
+    response = {}
+
+    if request.method == "POST":
+
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['Email']
+        username = request.form['username']
+        password = request.form['password']
+
+        # entered info is correct
+        info_val = False
+        if first_name != '' and last_name != '' and username != '' and password != '':
+            info_val = True
+        else:
+            info_val = False
+
+        # email validation
+        email_val = False
+
+        if email != "":
+            try:
+                sender_email_id = 'jimmy.local.shop.project@gmail.com'
+                receiver_email_id = email
+                password = "smsSHOP31314"
+                subject = "Local Shop Register"
+                msg = MIMEMultipart()
+                msg['From'] = sender_email_id
+                msg['To'] = receiver_email_id
+                msg['Subject'] = subject
+                body = "You're account has been verified"
+                msg.attach(MIMEText(body, 'plain'))
+                text = msg.as_string()
+                s = smtplib.SMTP('smtp.gmail.com', 587)
+                s.starttls()
+                s.login(sender_email_id, password)
+                s.sendmail(sender_email_id, receiver_email_id, text)
+                s.quit()
+                email_val = True
+            except:
+                email_val = False
+        else:
+            # response["message"] = "Invalid email"
+            # response["status_code"] = 201
+            return response
+
+        if email_val and info_val:
+            with sqlite3.connect(db) as conn:
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO user("
+                               "first_name,"
+                               "last_name,"
+                               "email,"
+                               "username,"
+                               "password) VALUES(?, ?, ?, ?, ?)", (first_name, last_name, email, username, password))
+                conn.commit()
+                response["message"] = "success"
+                response["status_code"] = 201
+    return response
+
+
 @app.route('/create-product/', methods=["POST"])
-@jwt_required()
+# @jwt_required()
 def create_product():
     response = {}
 
@@ -227,7 +290,7 @@ def get_user():
     return response
 
 
-@app.route("/delete-product/<int:product_id>")
+@app.route("/delete-product/<int:product_id>/")
 @jwt_required()
 def delete_post(product_id):
     response = {}
@@ -236,7 +299,7 @@ def delete_post(product_id):
         cursor.execute("DELETE FROM Product WHERE product_id=" + str(product_id))
         conn.commit()
         response['status_code'] = 200
-        response['message'] = "blog post deleted successfully."
+        response['message'] = "Product deleted successfully."
     return response
 
 
