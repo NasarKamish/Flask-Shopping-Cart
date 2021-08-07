@@ -176,7 +176,7 @@ def user_registration():
     return response
 
 
-@app.route('/user-registration/', methods=["GET"])
+@app.route('/user-registration/', methods=["POST"])
 def user_registration():
     response = {}
 
