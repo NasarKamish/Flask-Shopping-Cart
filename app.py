@@ -141,7 +141,7 @@ def user_registration():
             try:
                 sender_email_id = 'jimmy.local.shop.project@gmail.com'
                 receiver_email_id = email
-                password = "smsSHOP31314"
+                password_e = "smsSHOP31314"
                 subject = "Local Shop Register"
                 msg = MIMEMultipart()
                 msg['From'] = sender_email_id
@@ -152,7 +152,7 @@ def user_registration():
                 text = msg.as_string()
                 s = smtplib.SMTP('smtp.gmail.com', 587)
                 s.starttls()
-                s.login(sender_email_id, password)
+                s.login(sender_email_id, password_e)
                 s.sendmail(sender_email_id, receiver_email_id, text)
                 s.quit()
                 email_val = True
