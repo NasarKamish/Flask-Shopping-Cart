@@ -115,67 +115,6 @@ def protected():
     return '%s' % current_identity
 
 
-# @app.route('/user-registration/', methods=["POST"])
-# def user_registration():
-#     response = {}
-#
-#     if request.method == "POST":
-#
-#         first_name = request.form['first_name']
-#         last_name = request.form['last_name']
-#         email = request.form['Email']
-#         username = request.form['username']
-#         password = request.form['password']
-#
-#         # entered info is correct
-#         info_val = False
-#         if first_name != '' and last_name != '' and username != '' and password != '':
-#             info_val = True
-#         else:
-#             info_val = False
-#
-#         # email validation
-#         email_val = False
-#
-#         if email != "":
-#             try:
-#                 sender_email_id = 'jimmy.local.shop.project@gmail.com'
-#                 receiver_email_id = email
-#                 password = "smsSHOP31314"
-#                 subject = "Local Shop Register"
-#                 msg = MIMEMultipart()
-#                 msg['From'] = sender_email_id
-#                 msg['To'] = receiver_email_id
-#                 msg['Subject'] = subject
-#                 body = "You're account has been verified"
-#                 msg.attach(MIMEText(body, 'plain'))
-#                 text = msg.as_string()
-#                 s = smtplib.SMTP('smtp.gmail.com', 587)
-#                 s.starttls()
-#                 s.login(sender_email_id, password)
-#                 s.sendmail(sender_email_id, receiver_email_id, text)
-#                 s.quit()
-#                 email_val = True
-#             except:
-#                 email_val = False
-#         else:
-#             email_val = False
-#
-#         if email_val and info_val:
-#             with sqlite3.connect(db) as conn:
-#                 cursor = conn.cursor()
-#                 cursor.execute("INSERT INTO user("
-#                                "first_name,"
-#                                "last_name,"
-#                                "email,"
-#                                "username,"
-#                                "password) VALUES(?, ?, ?, ?, ?)", (first_name, last_name, email, username, password))
-#                 conn.commit()
-#                 response["message"] = "success"
-#                 response["status_code"] = 201
-#     return response
-
-
 @app.route('/user-registration/', methods=["POST"])
 def user_registration():
     response = {}
